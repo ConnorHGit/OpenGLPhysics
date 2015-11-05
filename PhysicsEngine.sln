@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysicsEngine", "PhysicsEngine\PhysicsEngine.vcxproj", "{C016B409-B601-426C-87FC-1815922A86A0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Learning OpenGl", "..\..\..\..\Source\Repos\OpenGlGame3\Learning OpenGl\Learning OpenGl.vcxproj", "{F7483D59-5EB7-49AA-A2F0-2CF4C1F048DC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+		RunOld|Win32 = RunOld|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C016B409-B601-426C-87FC-1815922A86A0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C016B409-B601-426C-87FC-1815922A86A0}.Debug|Win32.Build.0 = Debug|Win32
+		{C016B409-B601-426C-87FC-1815922A86A0}.Release|Win32.ActiveCfg = Release|Win32
+		{C016B409-B601-426C-87FC-1815922A86A0}.Release|Win32.Build.0 = Release|Win32
+		{C016B409-B601-426C-87FC-1815922A86A0}.RunOld|Win32.ActiveCfg = RunOld|Win32
+		{C016B409-B601-426C-87FC-1815922A86A0}.RunOld|Win32.Build.0 = RunOld|Win32
+		{F7483D59-5EB7-49AA-A2F0-2CF4C1F048DC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F7483D59-5EB7-49AA-A2F0-2CF4C1F048DC}.Debug|Win32.Build.0 = Debug|Win32
+		{F7483D59-5EB7-49AA-A2F0-2CF4C1F048DC}.Release|Win32.ActiveCfg = Release|Win32
+		{F7483D59-5EB7-49AA-A2F0-2CF4C1F048DC}.Release|Win32.Build.0 = Release|Win32
+		{F7483D59-5EB7-49AA-A2F0-2CF4C1F048DC}.RunOld|Win32.ActiveCfg = RunOld|Win32
+		{F7483D59-5EB7-49AA-A2F0-2CF4C1F048DC}.RunOld|Win32.Build.0 = RunOld|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
