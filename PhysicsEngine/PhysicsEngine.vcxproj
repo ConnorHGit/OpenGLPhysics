@@ -87,7 +87,10 @@
     <None Include="Shaders\Vertex_Shader.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BodyManager.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="GameWindow.cpp" />
     <ClCompile Include="LodePNG\lodepng.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -99,7 +102,10 @@
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BodyManager.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Collision.h" />
+    <ClInclude Include="Cube.h" />
     <ClInclude Include="DEVil\include\IL\config.h" />
     <ClInclude Include="DEVil\include\IL\devil_internal_exports.h" />
     <ClInclude Include="DEVil\include\IL\il.h" />

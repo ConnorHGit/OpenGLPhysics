@@ -1,6 +1,14 @@
 #include "Main.h"
 namespace Terrain
 {
+	struct tVertData{
+		glm::vec3 vert;
+		float slope;
+		tVertData(glm::vec3 vertA, float slopeA){
+			vert = vertA;
+			slope = slopeA;
+		}
+	};
 	void initTerrain();
 	void destroyTerrain();
 	void createTerrainModel(std::string modelName);
