@@ -3,23 +3,18 @@ bool Collision::intersecting(Cube* a, Cube* b){
 	glm::vec4 btv[8];
 
 	memcpy(&btv[0], &Cube::cubeVerticies[0], 8 * sizeof(glm::vec4));
+	
+	glm::mat4 spaceTransform = (glm::inverse(a->cubeTransformMatrix) * b->cubeTransformMatrix);
+	
+	for (int i = 0; i < 8; i++)btv[i] = spaceTransform * btv[i];
 
-	btv[0] = btv[0] * b->cubeTransformMatrix / a->cubeTransformMatrix;
-	btv[1] = btv[1] * b->cubeTransformMatrix / a->cubeTransformMatrix;
-	btv[2] = btv[2] * b->cubeTransformMatrix / a->cubeTransformMatrix;
-	btv[3] = btv[3] * b->cubeTransformMatrix / a->cubeTransformMatrix;
-	btv[4] = btv[4] * b->cubeTransformMatrix / a->cubeTransformMatrix;
-	btv[5] = btv[5] * b->cubeTransformMatrix / a->cubeTransformMatrix;
-	btv[6] = btv[6] * b->cubeTransformMatrix / a->cubeTransformMatrix;
-	btv[7] = btv[7] * b->cubeTransformMatrix / a->cubeTransformMatrix;
+	glm::vec3 bEdges[3];
 
-	glm::vec3 bEdge1 = glm::vec3(btv[1] - btv[0]);
-	glm::vec3 bEdge2 = glm::vec3(btv[1] - btv[2]);
-	glm::vec3 bEdge3 = glm::vec3(btv[1] - btv[5]);
+	bEdges[0] = glm::vec3(btv[1] - btv[0]);
+	bEdges[1] = glm::vec3(btv[1] - btv[2]);
+	bEdges[2] = glm::vec3(btv[1] - btv[5]);
 
-	glm::vec3 nFace1 = glm::cross(bEdge1, bEdge2);
-	glm::vec3 nFace2 = glm::cross(bEdge2, bEdge3);
-	glm::vec3 nFace3 = glm::cross(bEdge1, bEdge3);
+	glm::vec3 aEdges[] = { glm::vec3(0, 0, 1), glm::vec3(0, 1, 0), glm::vec3(1, 0, 0) };
 
 	glm::vec3 minA = glm::vec3(-0.5f, -0.5f, -0.5f);
 	glm::vec3 maxA = glm::vec3(0.5f, 0.5f, 0.5f);
@@ -32,4 +27,40 @@ bool Collision::intersecting(Cube* a, Cube* b){
 		maxB = glm::vec3(std::max(maxB.x, btv[i].x), std::max(maxB.y, btv[i].y), std::max(maxB.z, btv[i].z));
 	}
 
+	for (int i = 0; i < 3; i++){
+		glm::vec3 axis = bEdges[i];
+
+		float bMinProj = glm::dot(axis, minB);
+		float bMaxProj = glm::dot(axis, maxB);
+
+		float aMinProj = glm::dot(axis, minA);
+		float aMaxProj = glm::dot(axis, maxB);
+
+		if (std::max(bMinProj,bMaxProj) < std::min(aMaxProj,aMinProj) || std::max(aMinProj,aMaxProj) < std::min(bMaxProj,bMinProj))
+			return false;
+	}
+
+	//X-Axis(Cube A nFace1)
+	if (maxB.x < minA.x || maxA.x < minB.x) 
+		return false;
+	//Y-Axis(Cube A nFace2)
+	if (maxB.y < minA.y || maxA.y < minB.y) 
+		return false;
+	//Z-Axis(Cube B nFace3)
+	if (maxB.z < minA.z || maxA.z < minB.z) 
+		return false;
+
+	for (int i = 0; i < 9; i++){
+		glm::vec3 axis = glm::cross(bEdges[i / 3], aEdges[i % 3]);
+
+		float bMinProj = glm::dot(axis, minB);
+		float bMaxProj = glm::dot(axis, maxB);
+
+		float aMinProj = glm::dot(axis, minA);
+		float aMaxProj = glm::dot(axis, maxB);
+
+		if (std::max(bMinProj, bMaxProj) < std::min(aMaxProj, aMinProj) || std::max(aMinProj, aMaxProj) < std::min(bMaxProj, bMinProj))
+			return false;
+	}
+	return true;
 }
