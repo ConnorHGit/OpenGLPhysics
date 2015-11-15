@@ -23,7 +23,11 @@ Cube::Cube(glm::vec3 position = glm::vec3(0), glm::vec3 size = glm::vec3(1), glm
 Cube::~Cube()
 {
 }
+void Cube::update(float delta){
+
+}
 void Cube::updateMatrix(){
-	//Cube::cubeTransformMatrix = Render::createModelMatrix(position, rotation, size);
 	Cube::cubeTransformMatrix = glm::translate(glm::mat4(1), glm::vec3(position.x,position.y,position.z)) * Render::createRotationMatrix(rotation) * glm::scale(glm::mat4(1), size);
+	for (int i = 0; i < 8; i++)
+		instanceCubeVerticies[i] = glm::vec3(cubeTransformMatrix * cubeVerticies[i]);
 }

@@ -18,10 +18,10 @@ BodyManager::~BodyManager()
 void BodyManager::renderCubes(){
 	for (size_t i = 0; i < cubes.size(); ++i){
 		Cube* cur = cubes[i];
-		Render::renderModel("cube", "brick", cur->cubeTransformMatrix);
+		Render::renderModel("cube", "wood", cur->cubeTransformMatrix);
 	}
 }
-void BodyManager::updateCubes(){
+void BodyManager::updateCubes(float delta){
 	for (size_t i = 0; i < cubes.size(); ++i){
 		cubes[i]->updateMatrix();
 	}

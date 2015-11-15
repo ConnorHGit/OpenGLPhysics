@@ -26,21 +26,35 @@ void initGL(){
 }
 
 void gameLoop(){
+
+	Cube* a = Main::bodyManager.createCube(glm::vec3(4, 19.3, 2.6), glm::vec3(1, 1, 1), glm::vec3(1, 0, 0));
+	Cube* b = Main::bodyManager.createCube(glm::vec3(4, 18.3, 2.9), glm::vec3(1, 1, 1), glm::vec3(0.3, 0, 0));
+	
 	int i = 0;
 	std::chrono::milliseconds sinceLast;
 	while (!glfwWindowShouldClose(GW::window)){
+		unsigned int delta = (getTime() - elapsedTime).count();
+
 		elapsedTime = getTime();
-		Player::update(16.f);
-		Main::bodyManager.updateCubes();
+
+		Player::update(delta);
+		Main::bodyManager.updateCubes(delta);
+
 		Render::renderScene();
+
 		glfwPollEvents();
+
 		i++;
 		if (sinceLast.count() > 1000){
 			std::cout << "FPS" << i << std::endl;
 			i = 0;
 			sinceLast = std::chrono::milliseconds();
 		}
+
+		if (Collision::intersecting(a, b))std::cout << "COLLIDING" << std::endl;
+
 		std::this_thread::sleep_for(std::chrono::milliseconds((long)fmax(16 - (getTime() - elapsedTime).count(),0)));
+
 		sinceLast += getTime() - elapsedTime;
 	}
 
@@ -61,17 +75,13 @@ int main(){
 	initGL();
 
 	Texture::loadTexture("brick","C:\\Users\\Connor\\Documents\\Visual Studio 2013\\Projects\\Brick.png");
+	Texture::loadTexture("wood", "C:\\Users\\Connor\\Documents\\Visual Studio 2013\\Projects\\Wood.png");
 
 	Mod::createSquareModel("square");
 	Mod::createCubeModel("cube");
 
 	Terrain::initTerrain();
-
-	Cube* a = Main::bodyManager.createCube(glm::vec3(4, 19.3, 2.6), glm::vec3(1,2,1),glm::vec3(0.15,0,0));
-	Cube* b = Main::bodyManager.createCube(glm::vec3(4, 17.8, 2.9),glm::vec3(1,1,1),glm::vec3(0.3,0,0));
-
-	std::cout << "Colliding" << Collision::intersecting(a, b) << std::endl;
-
+	
 	gameLoop();
 
 	glfwTerminate();
