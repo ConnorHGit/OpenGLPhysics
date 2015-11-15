@@ -14,7 +14,7 @@ void Player::key_callback(GLFWwindow* window, int key, int scancode, int action,
 	}
 }
 void Player::update(float delta){
-	float speed = 0.03f;
+	float speed = 2.f;
 	float lookSpeed = 0.01f;
 
 	float minVertAngle = -4.71f;

@@ -22,8 +22,10 @@ void BodyManager::renderCubes(){
 	}
 }
 void BodyManager::updateCubes(float delta){
+	Collision::handleCollisions(BodyManager::cubes, delta);
 	for (size_t i = 0; i < cubes.size(); ++i){
-		cubes[i]->updateMatrix();
+		cubes[i]->update(delta);
+		cubes[i]->partialUpdate = 0;
 	}
 }
 Cube* BodyManager::createCube(glm::vec3 pos, glm::vec3 size, glm::vec3 rotation, float mass, glm::vec3 velocity){

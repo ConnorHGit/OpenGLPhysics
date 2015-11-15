@@ -16,15 +16,18 @@ Cube::Cube(glm::vec3 position = glm::vec3(0), glm::vec3 size = glm::vec3(1), glm
 	Cube::rotation = rotation;
 	Cube::velocity = velocity;
 	Cube::size = size;
+	partialUpdate = 0;
 	updateMatrix();
-
 }
 
 Cube::~Cube()
 {
 }
 void Cube::update(float delta){
-
+	position += velocity * (delta - partialUpdate);
+	velocity += force * inverseMass * (delta - partialUpdate);
+	updateMatrix();
+	partialUpdate += delta;
 }
 void Cube::updateMatrix(){
 	Cube::cubeTransformMatrix = glm::translate(glm::mat4(1), glm::vec3(position.x,position.y,position.z)) * Render::createRotationMatrix(rotation) * glm::scale(glm::mat4(1), size);
