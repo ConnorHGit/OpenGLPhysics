@@ -61,7 +61,7 @@ std::vector<Collision::intersectingAxis> Collision::intersecting(Cube* a, Cube* 
 //Returns when collision will happen in milliseconds, if no collision returns -1
 bool Collision::detectCollision(Cube* a, Cube* b, float delta, Collision::intersectingAxis* collisionAxis){
 
-	/*
+	
 	float radA = glm::length(a->instanceCubeVerticies[1] - a->position);
 	float radB = glm::length(b->instanceCubeVerticies[1] - b->position);
 	glm::vec3 betweenAxis = a->position - b->position;
@@ -74,24 +74,25 @@ bool Collision::detectCollision(Cube* a, Cube* b, float delta, Collision::inters
 
 	if (overlap + velAlong * delta < 0)
 		return false;
-	*/
+	
 
 	std::vector<Collision::intersectingAxis> axies = Collision::intersecting(a, b);
 	bool intersecting = true;
 	int axisLeast = 0;
-	for (int i = 0; i < 15; i++){
+	for (int i = 0; i < axies.size(); i++){
 		if (axies[i].overlapL > 0)intersecting = false;
 		if (axies[i].overlapL > axies[axisLeast].overlapL)axisLeast = i;
 	}
 	if (intersecting){
 		axies[axisLeast].time = 0;
 		if (collisionAxis != NULL)(*collisionAxis) = axies[axisLeast];
+		if (collisionAxis != NULL)(*collisionAxis).velAlong = glm::dot(axies[axisLeast].side ? b->velocity - a->velocity : a->velocity - b->velocity, axies[axisLeast].axis);
 		return true;//If objects already intersecting return 0(Intersected at this time)
 	}
 	Collision::intersectingAxis lastAxis;
 	lastAxis.time = 0;
 
-	for (int i = 0; i < 15; i++){
+	for (int i = 0; i < axies.size(); i++){
 		if (axies[i].axis == glm::vec3(0, 0, 0))continue;
 		//Find how fast objects are approaching eachother in axis direction
 		float velProj = glm::dot(axies[i].side ? b->velocity - a->velocity : a->velocity - b->velocity, axies[i].axis);
@@ -112,10 +113,10 @@ bool Collision::detectCollision(Cube* a, Cube* b, float delta, Collision::inters
 
 	float colTime = lastAxis.time; //Time collision may happen between this update and next
 
-	for (int i = 0; i < 15; i++){
+	for (int i = 0; i < axies.size(); i++){
 		if (axies[i].axis == glm::vec3(0, 0, 0))continue;
 		float curOverlap = axies[i].overlapL + axies[i].velAlong * colTime;//Check how far the objects overlap in axis at this time
-		if (curOverlap > 0 || curOverlap < axies[i].overlapR)//Check if objects are not overlaping in axis return -1 if not -objects not colliding-
+		if (curOverlap > 0 || axies[i].velAlong * colTime < axies[i].overlapR)//Check if objects are not overlaping in axis return -1 if not -objects not colliding-
 			return false;
 	}
 	if (collisionAxis != NULL)(*collisionAxis) = lastAxis;
@@ -125,9 +126,11 @@ void resolveCollision(Collision::manifold m){
 	m.a->update(m.collisionAxis.time);
 	m.b->update(m.collisionAxis.time);
 
-	m.a->velocity -= glm::dot(m.a->velocity, m.collisionAxis.axis) * m.collisionAxis.axis;
-	m.b->velocity -= glm::dot(m.b->velocity, m.collisionAxis.axis) * m.collisionAxis.axis;
 
+	glm::vec3 colImpulse = m.collisionAxis.velAlong * (m.a->mass + m.b->mass) * m.collisionAxis.axis;
+
+	m.a->velocity += colImpulse * m.a->inverseMass * (float)(m.collisionAxis.side ? 1 : -1);
+	m.b->velocity += colImpulse * m.b->inverseMass * (float)(!m.collisionAxis.side ? 1 : -1);
 }
 
 void Collision::handleCollisions(std::vector<Cube*> bodies,float delta){

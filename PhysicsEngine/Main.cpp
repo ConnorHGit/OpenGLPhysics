@@ -27,18 +27,17 @@ void initGL(){
 
 void gameLoop(){
 
-	Cube* a = Main::bodyManager.createCube(glm::vec3(6, 15, 3),glm::vec3(1),glm::vec3(0.1,0,0));
-	a->force = glm::vec3(0, 2, 0);
-	Cube* b = Main::bodyManager.createCube(glm::vec3(6, 19, 3));
-
+	Cube* a = Main::bodyManager.createCube(glm::vec3(6, 15, 3),glm::vec3(1),glm::vec3(0.3,0,0));
+	Cube* b = Main::bodyManager.createCube(glm::vec3(6, 19, 3),glm::vec3(1),glm::vec3(0.5,0,0));
+	b->velocity = glm::vec3(0,-0.5,0);
 	elapsedTime = (getTime()-std::chrono::milliseconds(16));
 
 	int i = 0;
 	std::chrono::milliseconds sinceLast;
 	while (!glfwWindowShouldClose(GW::window)){
 
-		float delta = 1.f/(getTime() - elapsedTime).count();
-		
+		//float delta = 1.f/(getTime() - elapsedTime).count();
+		float delta = 1/16.f;
 		elapsedTime = getTime();
 
 		Player::update(delta);
@@ -53,7 +52,6 @@ void gameLoop(){
 			std::cout << "FPS" << i << std::endl;
 			i = 0;
 			sinceLast = std::chrono::milliseconds();
-			b->velocity = glm::vec3(0, 0, 0.01);
 		}
 
 		std::this_thread::sleep_for(std::chrono::milliseconds((long)fmax(16 - (getTime() - elapsedTime).count(),0)));

@@ -25,6 +25,7 @@ Cube::~Cube()
 }
 void Cube::update(float delta){
 	position += velocity * (delta - partialUpdate);
+	if (position.y > 20)position.y = 20;
 	velocity += force * inverseMass * (delta - partialUpdate);
 	updateMatrix();
 	partialUpdate += delta;
